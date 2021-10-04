@@ -5,5 +5,6 @@ public class dogTest {
 		
 		Dog dog = new Dog("막둥이", 11);
 		
+		dog.bark();
 	}
 }

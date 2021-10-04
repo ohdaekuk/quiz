@@ -27,6 +27,11 @@ public class Dog {
 		this.age = age;
 	}
 	
+	public void bark() {
+		for(int i = 0; i <10; i++) {
+			System.out.println("멍멍멍");
+		}
+	}
 	
 	
 }
