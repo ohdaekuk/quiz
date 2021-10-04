@@ -6,5 +6,7 @@ public class dogTest {
 		Dog dog = new Dog("막둥이", 11);
 		
 		dog.bark();
+		
+		//파일만 pull 되는 지 확인해 보기. 
 	}
 }
