@@ -1,16 +1,17 @@
 package daekuk;
 
 import java.sql.SQLException;
+import java.util.List;
 
-public class Ranking_insert {
+public class Ranking_rankingFindAll {
 	public static void main(String[] args) {
 		
 		RankingDao dao = RankingImp.getInstance();
 		
-		Ranking ranking = new Ranking(0, "피카츄", 0);
-		
 		try {
-			dao.insert(ranking);
+			List<Ranking> rankingList = dao.rankingFindAll();
+			
+			System.out.println(rankingList);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {

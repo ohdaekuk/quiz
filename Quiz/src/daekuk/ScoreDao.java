@@ -1,25 +1,29 @@
 package daekuk;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface ScoreDao {
 	
 	// 점수 저장
-	public int scoreInsert(Score score);
+	public int insert(Score score) throws ClassNotFoundException, SQLException;
 	
 	// DB에서 user_num으로 조회하는 메소드
-	public Score scoreFindByuserNum(int user_num);
+	public List<Score> findByuserNum() throws ClassNotFoundException, SQLException;
 	
 	// DB에서 user_nickName으로 조회하는 메소드
-	public Score scoreFindByuserNickName(int user_nickName);
+	public List<Score> findByuserNickName() throws ClassNotFoundException, SQLException;
 	
 	// DB에서 final_score으로 조회하는 메소드
-	public Score scoreFindByFinal_score(int final_score);
+	public List<Score> scoreFindByFinal_score() throws ClassNotFoundException, SQLException;
 	
 	// DB에서 전체 조회하는 메소드
-	public List<Score> rankingFindAll();
+	public List<Score> scoreFindAll() throws ClassNotFoundException, SQLException;
 	
 	// DB에 user_nickName으로 삭제하는 메소드
-	public int delete(String user_nickName);
+	public int delete() throws ClassNotFoundException, SQLException;
+	
+	// DB에서 user_num으로 수정하는 메소드
+	public int update() throws ClassNotFoundException, SQLException;
 
 } 

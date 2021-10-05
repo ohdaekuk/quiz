@@ -24,7 +24,7 @@ public class Score {
 		this.user_num = user_num;
 	}
 
-	public String getuser_nickName() {
+	public String getUser_nickName() {
 		return user_nickName;
 	}
 

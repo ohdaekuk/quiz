@@ -2,15 +2,17 @@ package daekuk;
 
 import java.sql.SQLException;
 
-public class Ranking_insert {
+public class Ranking_update {
 	public static void main(String[] args) {
 		
 		RankingDao dao = RankingImp.getInstance();
 		
-		Ranking ranking = new Ranking(0, "피카츄", 0);
-		
 		try {
-			dao.insert(ranking);
+			int update =  dao.update();
+			
+			if (update > 0) {
+				System.out.println("수정 성공!");
+			}
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -18,4 +20,4 @@ public class Ranking_insert {
 		}
 		
 	}
-}
+}	
