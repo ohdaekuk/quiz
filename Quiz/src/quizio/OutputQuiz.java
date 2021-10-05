@@ -1,5 +1,6 @@
 package quizio;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public interface OutputQuiz {
@@ -7,6 +8,8 @@ public interface OutputQuiz {
 	
 	String delQuiz(String quiz) throws IOException;
 	
-	String toUserQuiz(String quiz);
+	String toUserQuiz() throws FileNotFoundException, IOException;
+	
+	String saveLog();
 
 }

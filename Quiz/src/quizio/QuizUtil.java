@@ -3,6 +3,8 @@ package quizio;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -10,14 +12,18 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 
 
 public class QuizUtil implements InputQuiz, OutputQuiz{
 	
 	private static QuizUtil quizUtil = new QuizUtil();
 	
-	public static QuizUtil getManager() {
+	public static QuizUtil getUtil() {
 		return quizUtil;
 	}
 
@@ -39,46 +45,99 @@ public class QuizUtil implements InputQuiz, OutputQuiz{
 	}
 
 	@Override
-	public String delQuiz(String quiz) throws IOException {
-		try(BufferedWriter bw = new BufferedWriter(new FileWriter("Quiz.txt", false));
-				//append 하지 않고 처음부터 다 쓰기.
-				BufferedReader br = new BufferedReader(new FileReader("Quiz.txt"));){
+	public String delQuiz(String quiz) throws IOException, NullPointerException {
+
+		File file = new File("Quiz.txt");
+		List<String> quizList =  new ArrayList<String>();
+		
+		if(!file.exists()) {
+			file.mkdirs();
+		}
+		
+		try(BufferedReader br = new BufferedReader(new FileReader(file));){
+			String line = "";
+			String deleted = "";
 			
-			StringBuffer sb = new StringBuffer();
-			String quizLine= "";
-			String deletedLine = "";
-			while((quizLine = br.readLine()) != null) {
-				if (!quizLine.contains(quiz+"%")) {
-					sb.append(quizLine);
-					sb.append("\n");
+			while((line = br.readLine())!=null) {
+				if(!line.contains(quiz)) {
+					quizList.add(line);
 				}else {
-					deletedLine = quizLine;
+					deleted = line;
 				}
 			}
-			//읽어서 StringBuffer 객체에 저장.
+			try(BufferedWriter bw = new BufferedWriter(new FileWriter(file));){
+				for(String s : quizList) {
+					bw.write(s+"\n");
+				}
+			}
 			
-			char[] buff = new char[sb.length()];
-			sb.getChars(0, sb.length()-1, buff, 0);
-			//BufferWriter에 파라미터로 StringBuffer 못 받으므로 char로 변경해줌.
+			
+			System.out.println(quizList.toString());
 			
 			
-			bw.write(buff);
-			
-			//한번에 다 쓰기.
-			
-			return deletedLine;
-			//삭제한 String 반환.
+			return deleted;
 		}
 	}
 
 	@Override
-	public String toUserQuiz(String quiz) {
+	public String toUserQuiz() throws FileNotFoundException, IOException {
+		quizToServer();
 		return null;
 	}
 
 	@Override
-	public String quizToServer(String quiz) {
+	public Map quizToServer() throws FileNotFoundException, IOException {
+		try(BufferedReader br = new BufferedReader(new FileReader("Quiz.txt"))) {
+			
+			String temp = "";
+			StringBuffer sb = new StringBuffer();
+			Map<String, String> qna = new HashMap<String, String>();
+			//문제와 정답을 넣기 위한 해쉬 맵.
+			while((temp = br.readLine()) != null) {
+				sb.append(temp);
+			}
+			char[] buff = new char[sb.length()];
+			sb.getChars(0, sb.length(), buff, 0);
+			String buffStr = new String(buff);
+			String[] stringArr = buffStr.split("\n");
+			
+			//문제들을 한 문장 별로 나눔. 
+			for(int i = 0; i < stringArr.length; i++) {
+				String [] keyValue = stringArr[i].split("%");
+				qna.put(keyValue[0], keyValue[1]);
+			}
+			//해쉬맵에 문제와 정답을 문제 = key, 정답 = value 형태로 넣음.
+			
+			
+			
+			
+			return null;
+		}
+	}
+
+	@Override
+	public String saveLog() {
+		
 		return null;
+	}
+
+	@Override
+	public List<String> loadQuiz() throws FileNotFoundException, IOException {
+		File file = new File("Quiz.txt");
+		
+		if(!file.exists()) {
+			file.mkdirs();
+		}
+		
+		try(BufferedReader br = new BufferedReader(new FileReader(file))){
+			List<String> quizList =  new ArrayList<String>();
+			String line = "";
+			while((line = br.readLine())!=null) {
+				System.out.println(line);
+				quizList.add(line);
+			}
+			return quizList;
+		}
 	}
 
 }
