@@ -2,7 +2,7 @@ package daekuk;
 
 import java.time.LocalTime;
 
-public class Access_log {
+public class Access_log { 
 	
 	private int user_num;
 	private LocalTime access_time;
