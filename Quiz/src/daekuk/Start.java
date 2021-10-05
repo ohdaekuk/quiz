@@ -22,7 +22,7 @@ public class Start {
 
 	public void setUser_num(int user_num) {
 		this.user_num = user_num;
-	}
+	} 
 
 	public LocalDateTime getStart_time() {
 		return start_time;

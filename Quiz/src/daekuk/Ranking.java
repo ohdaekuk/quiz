@@ -20,7 +20,7 @@ public class Ranking {
 		return user_num;
 	}
 
-	public void setUser_num(int user_num) {
+	public void setUser_num(int user_num) { 
 		this.user_num = user_num;
 	}
 

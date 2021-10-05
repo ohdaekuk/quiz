@@ -19,7 +19,7 @@ public class Score {
 	public int getUser_num() {
 		return user_num;
 	}
-
+ 
 	public void setUser_num(int user_num) {
 		this.user_num = user_num;
 	}

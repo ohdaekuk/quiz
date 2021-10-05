@@ -14,6 +14,6 @@ public interface EndDao {
 	public List<End> endFindAll();
 	
 	// DB에 user_num으로 삭제하는 메소드
-	public int delete(int user_num);
+	public int delete(int user_num); 
 	
 }

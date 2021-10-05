@@ -20,7 +20,7 @@ public class StartImp implements StartDao{
 	}
 
 	@Override
-	public int delete(int user_num) {
+	public int delete(int user_num) { 
 		return 0;
 	}
 

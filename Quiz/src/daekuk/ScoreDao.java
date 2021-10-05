@@ -22,4 +22,4 @@ public interface ScoreDao {
 	// DB에 user_nickName으로 삭제하는 메소드
 	public int delete(String user_nickName);
 
-}
+} 

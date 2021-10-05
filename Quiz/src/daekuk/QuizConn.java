@@ -16,6 +16,6 @@ public class QuizConn {
 				+ "characterEncoding=utf-8&serverTimezone=Asia/Seoul";
 		
 		// 접속
-		return DriverManager.getConnection(url, id, password); 
+		return DriverManager.getConnection(url, id, password);  
 	}
 }

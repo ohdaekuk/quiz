@@ -20,7 +20,7 @@ public class RankingImp implements RankingDao{
 	}
 
 	@Override
-	public List<Ranking> rankingFindAll() {
+	public List<Ranking> rankingFindAll() { 
 		return null;
 	}
 

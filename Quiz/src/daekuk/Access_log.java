@@ -10,7 +10,7 @@ public class Access_log {
 	public Access_log(int user_num, LocalTime access_time) {
 		this.user_num = user_num;
 		this.access_time = access_time;
-	}
+	} 
 	
 	public Access_log() {
 		

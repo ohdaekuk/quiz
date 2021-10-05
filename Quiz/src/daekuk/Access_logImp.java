@@ -12,7 +12,7 @@ public class Access_logImp implements Access_logDao{
 
 	@Override
 	public List<Access_log> findbyUserNum(int user_num) {
-		return null;
+		return null; 
 	}
 
 	@Override

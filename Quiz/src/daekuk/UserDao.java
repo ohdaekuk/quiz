@@ -20,7 +20,7 @@ public interface UserDao {
 	// DB에 user_num으로 삭제하는 메소드
 	public int delete(int user_num);
 	
-	// Db에 employee를 수정하는 메소드
+	// Db에 employee를 수정하는 메소드 
 	public int update(User user);
 	
 }

@@ -18,7 +18,7 @@ public class User {
 		this.user_nickName = user_nickName;
 	}
 	
-	public User() {
+	public User() { 
 		
 	}
 

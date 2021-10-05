@@ -8,7 +8,7 @@ public interface Access_logDao {
 	// 접속 기록 저장
 	public int accessInsert(Access_log access);
 	
-	// user_num으로 접속 기록 조회
+	// user_num으로 접속 기록 조회 
 	public List<Access_log> findbyUserNum(int user_num);
 	
 	// DB에서 전체 조회하는 메소드

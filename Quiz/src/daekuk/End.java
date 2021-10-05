@@ -13,7 +13,7 @@ public class End {
 	}
 	
 	public End() {
-		
+		 
 	}
 
 	public int getUser_num() {

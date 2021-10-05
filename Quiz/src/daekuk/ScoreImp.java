@@ -22,7 +22,7 @@ public class ScoreImp implements ScoreDao{
 	@Override
 	public Score scoreFindByFinal_score(int final_score) {
 		return null;
-	}
+	} 
 
 	@Override
 	public List<Score> rankingFindAll() {
