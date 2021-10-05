@@ -10,6 +10,6 @@ public interface OutputQuiz {
 	
 	String toUserQuiz() throws FileNotFoundException, IOException;
 	
-	String saveLog();
+	void saveLog(String chat) throws IOException;
 
 }
