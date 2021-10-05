@@ -1,4 +1,4 @@
-package daekuk;
+package end;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import daekuk.QuizConn;
 
 public class EndImp implements EndDao{
 	
@@ -23,7 +25,7 @@ public class EndImp implements EndDao{
 	
 	private End convertEnd(ResultSet rs) throws SQLException {
 		return new End(rs.getInt("user_num"),
-				rs.getTimestamp("access_time").toLocalDateTime(),
+				rs.getTimestamp("end_time").toLocalDateTime(),
 				rs.getString("user_nickName"));
 	}
 	
