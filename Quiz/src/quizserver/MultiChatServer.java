@@ -168,6 +168,17 @@ public class MultiChatServer {
 				
 				
 				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
 				String msg = null;
 				
 				//조건 문이 실행 가능 상태일때는 1 아니면 0. 
@@ -274,6 +285,7 @@ public class MultiChatServer {
 						Score dbScore = new Score(user.getUser_num(), user.getUser_nickName(), clientScore);
 						ScoreImp.getInstance().insert(dbScore);
 						Ranking dbRaking = new Ranking(user.getUser_num(), user.getUser_nickName(), 3);
+						
 						
 						//종료 되었으므로 게임 진행하며 저장된 사항 모두 저장
 					}
