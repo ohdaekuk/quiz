@@ -1,4 +1,4 @@
-package daekuk;
+package start;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,46 +9,50 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class EndImp implements EndDao{
+import daekuk.QuizConn;
+
+public class StartImp implements StartDao{
 	
-	private static EndImp instance = new EndImp();
+	private static StartImp instance = new StartImp();
 	
-	private EndImp() {}
+	private StartImp() {}
 	
-	public static EndImp getInstance() {
+	public static StartImp getInstance() {
 		return instance;
 	}
 	
 	Scanner scan = new Scanner(System.in);
 	
-	private End convertEnd(ResultSet rs) throws SQLException {
-		return new End(rs.getInt("user_num"),
+	private Start convertStart(ResultSet rs) throws SQLException {
+		return new Start(rs.getInt("user_num"),
 				rs.getTimestamp("access_time").toLocalDateTime(),
 				rs.getString("user_nickName"));
 	}
 	
+	
+
 	@Override
-	public int endInsert(End end) throws ClassNotFoundException, SQLException {
+	public int startInsert(Start start) throws SQLException, ClassNotFoundException {
 		
-		String sql = "insert into end value(0, ?, ?)";
+		String sql = "insert into start value(0, ?, ?)";
 		
 		try(Connection conn = QuizConn.getConn();
 				PreparedStatement pst = conn.prepareStatement(sql)){
 			
-			pst.setString(1, end.getEnd_time().toString());
-			pst.setString(2, end.getUser_nickName());
+			pst.setString(1, start.getStart_time().toString());
+			pst.setString(2, start.getUser_nickName());
 			
 			return pst.executeUpdate();
 		}
 	}
 
 	@Override
-	public List<End> findbyUserNum() throws ClassNotFoundException, SQLException {
+	public List<Start> findbyUserNum() throws ClassNotFoundException, SQLException {
 		
 		System.out.println("조회 할 user_num을 입력해주세요.");
 		int user_num = scan.nextInt();
 		
-		String sql = "select * from end where user_num = ?";
+		String sql = "select * from start where user_num = ?";
 		
 		try(Connection conn = QuizConn.getConn();
 				PreparedStatement pst = conn.prepareStatement(sql)){
@@ -57,46 +61,46 @@ public class EndImp implements EndDao{
 			
 			try(ResultSet rs = pst.executeQuery()){
 				
-				List<End> endList = new ArrayList<End>();
+				List<Start> startList = new ArrayList<Start>();
 				
 				while (rs.next()) {
 					
-					endList.add(new End(rs.getInt("user_num"),
+					startList.add(new Start(rs.getInt("user_num"),
 							rs.getTimestamp("end_time").toLocalDateTime(),
 							rs.getString("user_nickName")));
 					
 				}
-				return endList; 
+				return startList; 
 			}
 		}
 	}
 
 	@Override
-	public List<End> endFindAll() throws ClassNotFoundException, SQLException {
+	public List<Start> startFindAll() throws ClassNotFoundException, SQLException {
 		
-		String sql = "select * from end";
+		String sql = "select * from start";
 		
 		try(Connection conn = QuizConn.getConn();
 				Statement stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery(sql)){
 			
-			List<End> endList = new ArrayList<End>();
+			List<Start> startList = new ArrayList<Start>();
 			
 			while (rs.next()) {
-				endList.add(convertEnd(rs));
+				startList.add(convertStart(rs));
 			}
-			return endList;
+			return startList;
 		}
 	}
-	
+
 	@Override
-	public int delete() throws ClassNotFoundException, SQLException {
+	public int delete() throws ClassNotFoundException, SQLException { 
 		
 		System.out.println("삭제할 user_num을 입력해주세요.");
 		
 		int user_num = scan.nextInt();
 		
-		String sql = "delete from end where user_num = ?";
+		String sql = "delete from start where user_num = ?";
 		
 		try(Connection conn = QuizConn.getConn();
 				PreparedStatement pst = conn.prepareStatement(sql)){
@@ -107,4 +111,5 @@ public class EndImp implements EndDao{
 			
 		}
 	}
+
 }

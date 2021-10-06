@@ -31,6 +31,6 @@ public interface UserDao {
 	public int delete() throws ClassNotFoundException, SQLException;
 	
 	// Db에 user를 수정하는 메소드 
-	public int update();
+	public int update() throws ClassNotFoundException, SQLException;
 	
 }
