@@ -1,4 +1,4 @@
-package daekuk;
+package ranking;
 
 public class Ranking {
 	

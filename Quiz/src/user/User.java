@@ -1,4 +1,4 @@
-package daekuk;
+package user;
 
 public class User {
 

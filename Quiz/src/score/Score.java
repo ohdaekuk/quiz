@@ -1,4 +1,4 @@
-package daekuk;
+package score;
 
 public class Score {
 	
