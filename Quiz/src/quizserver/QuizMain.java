@@ -1,8 +1,8 @@
-package chatserver;
+package quizserver;
 
 import java.io.IOException;
 
-public class ChatMain {
+public class QuizMain {
 	public static void main(String[] args) {
 		try{
 			MultiChatServer server = new MultiChatServer(7777);

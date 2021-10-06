@@ -1,4 +1,4 @@
-package chatserver;
+package quizserver;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -19,7 +19,7 @@ public class ClientSender extends Thread {
 			System.out.println("보낼 메세지를 입력하세요.");
 			while(true) {
 				String msg = scan.nextLine();
-				if(msg.equals("q")) {
+				if(msg.equals("quit")) {
 					System.out.println("종료합니다.");
 					break;
 				}
