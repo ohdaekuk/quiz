@@ -42,6 +42,7 @@ public class QuizManager {
 					}
 				}
 			}
+			//
 			
 			
 			if(button.equals("2")) {
