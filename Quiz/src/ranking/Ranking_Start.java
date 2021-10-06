@@ -1,11 +1,11 @@
-package end;
+package ranking;
 
 import java.sql.SQLException;
 
-public class End_Start {
+public class Ranking_Start {
 	public static void main(String[] args) {
 		
-		EndDao dao = EndImp.getInstance();
+		RankingDao dao = RankingImp.getInstance();
 		
 		try {
 			dao.start();

@@ -1,11 +1,11 @@
-package end;
+package start;
 
 import java.sql.SQLException;
 
-public class End_Start {
+public class Start_start {
 	public static void main(String[] args) {
 		
-		EndDao dao = EndImp.getInstance();
+		StartDao dao = StartImp.getInstance();
 		
 		try {
 			dao.start();

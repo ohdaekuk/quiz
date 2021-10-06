@@ -148,23 +148,33 @@ public class EndImp implements EndDao{
 					System.out.println("종료시간 조회하기");
 					
 					while(true) {
-						
-						// user_num 넣어서 조회하기
-//						List<End> endfindbyUserNumList = dao.findbyUserNum();
-//						
-//						System.out.println(endfindbyUserNumList);
-						
-						// 전체 시간 조회하기
-						List<End> endList = dao.endFindAll();
-						
-						System.out.println(endList);
-						
-						System.out.println("조회를 완료하셨으면 엔터를 눌러주세요.");
-						
+						System.out.println("1. user_num으로 조회하기 2. 전체 조회하기");
 						select = scan.nextLine();
-						
+						if(select.equals("1")) {
+							
+//							 user_num 넣어서 조회하기
+							
+							List<End> endfindbyUserNumList = dao.findbyUserNum();
+							
+							System.out.println(endfindbyUserNumList);
+							
+							System.out.println("조회를 완료하셨으면 엔터를 눌러주세요.");
+							
+							select = scan.nextLine();
+							
+						} if(select.equals("2")) {
+							
+							// 전체 시간 조회하기
+							List<End> endList = dao.endFindAll();
+							
+							System.out.println(endList);
+							
+							System.out.println("조회를 완료하셨으면 엔터를 눌러주세요.");
+							
+							select = scan.nextLine();
+							
+						}
 						break;
-						
 					}
 				}
 				if(select.equals("3")) {
@@ -182,13 +192,9 @@ public class EndImp implements EndDao{
 					}
 				}
 			}
-			
 			System.out.println("종료되었습니다.");
-			
 		}finally {
-			
 		}
-		
 		return null;
 	}
 
@@ -207,6 +213,3 @@ public class EndImp implements EndDao{
 		return null;
 	}
 }
-
-
-

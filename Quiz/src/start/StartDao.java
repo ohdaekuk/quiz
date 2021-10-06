@@ -3,6 +3,8 @@ package start;
 import java.sql.SQLException;
 import java.util.List;
 
+import end.End;
+
 public interface StartDao {
 	
 	// 시작시간 저장
@@ -17,6 +19,10 @@ public interface StartDao {
 	// DB에 user_num으로 삭제하는 메소드
 	public int delete() throws ClassNotFoundException, SQLException;
 	
-	 
+	// StartAll
+	public Start start()  throws ClassNotFoundException, SQLException;
 	
+	// auto_increment 초기화
+	public End auto() throws ClassNotFoundException, SQLException;
+		
 }
