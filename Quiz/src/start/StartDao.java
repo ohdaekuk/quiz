@@ -23,6 +23,6 @@ public interface StartDao {
 	public Start start()  throws ClassNotFoundException, SQLException;
 	
 	// auto_increment 초기화
-	public End auto() throws ClassNotFoundException, SQLException;
+	public Start auto() throws ClassNotFoundException, SQLException;
 		
 }

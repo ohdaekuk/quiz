@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import daekuk.QuizConn;
-
 public class RankingImp implements RankingDao{
 	
 	private static RankingImp instance = new RankingImp();

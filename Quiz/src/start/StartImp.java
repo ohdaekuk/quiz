@@ -10,9 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import daekuk.QuizConn;
-import end.End;
-
 public class StartImp implements StartDao{
 	
 	private static StartImp instance = new StartImp();
@@ -68,7 +65,7 @@ public class StartImp implements StartDao{
 				while (rs.next()) {
 					
 					startList.add(new Start(rs.getInt("user_num"),
-							rs.getTimestamp("end_time").toLocalDateTime(),
+							rs.getTimestamp("start_time").toLocalDateTime(),
 							rs.getString("user_nickName")));
 					
 				}
@@ -204,7 +201,7 @@ public class StartImp implements StartDao{
 	}
 
 	@Override
-	public End auto() throws ClassNotFoundException, SQLException {
+	public Start auto() throws ClassNotFoundException, SQLException {
 		
 		String sql = "alter table start auto_increment = 0";
 		
