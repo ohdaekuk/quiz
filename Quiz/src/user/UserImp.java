@@ -77,6 +77,28 @@ public class UserImp implements UserDao{
 			}
 		}
 	}
+	
+	@Override
+		public User userFindByUser_num(int user_num) {
+		
+		String sql = "select * from user where user_num = ?";
+		
+		try(Connection conn = QuizConn.getConn();
+				PreparedStatement pst = conn.prepareStatement(sql)){
+			
+			pst.setInt(1, user_num);
+			
+			try(ResultSet rs = pst.executeQuery()){
+				
+				List<User> userList = new ArrayList<User>();
+				
+				if(rs.next()) {
+					return convertUser(rs);
+				}
+					
+			}
+		}
+	}
 
 	@Override
 	public List<User> userFindByUser_Id() throws ClassNotFoundException, SQLException {

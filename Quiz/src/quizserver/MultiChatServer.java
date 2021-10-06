@@ -1,6 +1,7 @@
 package quizserver;
 
 import java.io.BufferedReader;
+
 import java.io.BufferedWriter;
 import java.io.IOError;
 import java.io.IOException;
@@ -14,26 +15,33 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import daekuk.RankingImp;
-import daekuk.UserImp;
 import quizio.QuizUtil;
+import user.User;
+import user.UserImp;
 
 
 public class MultiChatServer {
-	private List<MultiChatServer.User> userList;
+	private List<MultiChatServer.Client> clientList;
+	//접속자
 	private ServerSocket serverSocket;
+	private List<User> userList;
+	//DB에 저장된 유저.
 	
 	//QuizUtill: 퀴즈 관련 입출력 있는 메서드 모음 클래스.
 	private QuizUtil util = QuizUtil.getUtil();
 	private Map<String, String> quizList = util.quizToServer();
-	
+	int gameCount = 0;
+	int connCount = 0;
 	private LocalDateTime startTime;
 	private LocalDateTime finishTime;
 	
 	
 	public MultiChatServer(int port) throws IOException{
 		serverSocket = new ServerSocket(port);
-		userList = new ArrayList<MultiChatServer.User>();
+		clientList = new ArrayList<MultiChatServer.Client>();
+		userList = new ArrayList<User>();
+		
+		
 	}
 	
 	public void runServer() throws IOException{
@@ -41,36 +49,32 @@ public class MultiChatServer {
 			System.out.println("접속 대기중 ...");
 			Socket socket = serverSocket.accept();
 			System.out.println("접속: " + socket.getInetAddress() + "- " + socket.getPort());
-			User user = new User(socket);
-			userList.add(user);
-			user.start();
+			Client client = new Client(socket);
+			clientList.add(client);
+			client.start();
 			
 		}
 	}
 
 		
 		
-	class User extends Thread{
-		private String name;
+	class Client extends Thread{
+		private String clientName;
 		private Socket socket;
 		private BufferedWriter bw;
-		private String password;
-		private String id;
-		private int score;
+		private String clientPassword;
+		private String clientId;
+		private int clientScore;
+		int ready=0;
+		//준비 된 상태 1, 준비 안된 상태 0
 		
-		public User(Socket socket) throws IOException{
+		public Client(Socket socket) throws IOException{
 			this.socket = socket;
 			bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 		}
 		
-		String thisUserId = "";
-		String thisUserPassword = "";
-		String thisUserNickName = "";
-		int thisUserNumber = 0;
-		int thisUserScore = 0;
-		int gameCount = 0;
-		int userCount = 0;
-		//여기 있는 변수 위에 있는 클래스랑 합치기.  
+
+
 		
 		
 		//내부 클래스를 써서 데이터 베이스와 연결된 User객체와 이 객체 둘다 쓰는 것이 좋은지 아니면, 
@@ -81,6 +85,9 @@ public class MultiChatServer {
 		//로그를 텍스트에 쓰는 메서드 
 		@Override
 		public void run() {
+			User user = new User();
+			int clientScore = 0;
+			//User의 필드 [num, id, pass, age, gender, nickname], score는 스코어 필드에.
 			Iterator<String> keys = quizList.keySet().iterator();
 			//넥스트 한번 돌때마다 게임 카운트 숫자 올라감.
 			String question = keys.next();
@@ -88,7 +95,6 @@ public class MultiChatServer {
 			//키 값으로 문제 정답 받기.
 			String answer = quizList.get(question);
 			
-			daekuk.User thisUser = null;
 			
 			BufferedReader br = null;
 			
@@ -100,79 +106,87 @@ public class MultiChatServer {
 				
 				//로그인 로직 시작.
 				while(true) {
+					
 					bw.write("아이디를 입력하세요");
 					bw.flush();
-					this.id = br.readLine();
+					this.clientId = br.readLine();
 					
 					bw.write("비밀번호를 입력하세요");
 					bw.flush();
-					this.password = br.readLine();
+					this.clientPassword = br.readLine();
 					
-					List<daekuk.User> dbUserList = UserImp.getInstance().userFindAll();
+					List<User> dbUserList = UserImp.getInstance().userFindAll();
 					//여기 나중에 한 폴더로 옮겨서 보기.
 					
 					
 
 					
-					for(daekuk.User u : dbUserList) {
-						thisUserId = u.getUser_Id();
+					for(User u : dbUserList) {
+						user.setUser_Id(u.getUser_Id());
 						//반복문 탈출하기 위해 최종 기록된 userId값을 저장.
-						thisUserPassword = u.getUser_Password();
+						user.setUser_Password(u.getUser_Password());
 						//반복문 탈출하기 위해 최종 기록된 userPassword를 저장.
 						
-						if(thisUserId.equals(id)&&thisUserPassword.equals(password)) {
+						if(user.getUser_Id().equals(clientId)&&user.getUser_Password().equals(clientPassword)) {
 							bw.write("로그인되었습니다.");
 							bw.flush();
-							thisUserNumber = u.getUser_num();
+							//아이디와 비밀번호에 해당되는 user의 정보가 위에서 선언한 User의 객체에 저장됨.
+							user = u;
+							userList.add(user);
 							break;
 						}
 					}
 					
-					if(thisUserId.equals(id)&&thisUserPassword.equals(password)) {
+					if(user.getUser_Id().equals(clientId)&&user.getUser_Password().equals(clientPassword)) {
 						break;
 					}else {
 						bw.write("아이디 또는 비밀번호가 옳바르지 않습니다.");
 						bw.flush();
 					}
 				}
-				userCount++;
+				connCount++;
 				//접속 성공하면 유저 카운트 올라감.
 				
 				
 				
 				
 				
-				for(User user : userList) {
-						user.bw.write(thisUserNickName+"님이 접속하였습니다.");
-						user.bw.newLine();
-						user.bw.flush();
+				for(Client client : clientList) {
+						client.bw.write(user.getUser_nickName()+"님이 접속하였습니다.");
+						client.bw.newLine();
+						client.bw.flush();
 				}
 				
 				
 				
 				String msg = null;
 				
-				
+				//조건 문이 실행 가능 상태일때는 1 아니면 0. 
+				int onOff = 1;
 				
 				while(true) {
 					
-					if(userCount == 3) {
-						for(User user : userList) {
+					boolean readyAll = ServerMethodImpliment.getInstance().checkReady(clientList);
+					//레디 상태 받기. 
+					
+					if(connCount == 3 && onOff == 1 && readyAll) {
+						for(Client client : clientList) {
 							LocalDateTime startTime = LocalDateTime.now();
-							user.bw.write("[게임을 시작하겠습니다.]");
-							user.bw.write(question);						
+							client.bw.write("[게임을 시작하겠습니다.]");
+							client.bw.write(question);
+							onOff = 0;
 							}
 					}
 					
 					msg = br.readLine();
 					//사용자가 보낸 메세지 읽고 
-					util.saveLog(msg);
+					util.saveLog("["+user.getUser_nickName()+"] : " + msg);
 					//바로 저장한다.
-					for(User user :userList) {
-						if(this != user) {
-							user.bw.write("["+thisUserNickName+"] : " + msg);
-							user.bw.newLine();
-							user.bw.flush();
+					for(Client client :clientList) {
+						if(this != clientList) {
+							client.bw.write("["+user.getUser_nickName()+"] : " + msg);
+							client.bw.newLine();
+							client.bw.flush();
 						}
 					}
 					//모든 사람에게 메세지 보내기.
@@ -190,19 +204,19 @@ public class MultiChatServer {
 						//맵에서 퀴즈 문제 받아서 다음 정답 세팅.
 						quizList.get(question);
 						//맞춘 사람 점수 올리기.
-						thisUserScore += 10;
+						clientScore += 10;
 						//게임 숫자 카운트.
 						gameCount++;
 						//문제 모두에게 보내기.
-						for(User user : userList) {
-							user.bw.write("["+thisUserNickName+"] : " + "이 정답을 맞추었습니다.");
-							user.bw.newLine();
-							user.bw.flush();
+						for(Client client : clientList) {
+							client.bw.write("["+user.getUser_nickName()+"] : " + "이 정답을 맞추었습니다.");
+							client.bw.newLine();
+							client.bw.flush();
 							
 							
-							user.bw.write("다음문제는.. ");
-							user.bw.flush();
-							user.bw.write(question);
+							client.bw.write("다음문제는.. ");
+							client.bw.flush();
+							client.bw.write(question);
 							
 						}
 					}
@@ -210,13 +224,15 @@ public class MultiChatServer {
 										
 					
 					//게임 종료 시점
-					if(gameCount == 4) {
+					if(gameCount == 4 || connCount<3) {
 						//게임 종료시 게임 시작 시간 기록하기 위해 변수 선언.
 						LocalDateTime endTime = LocalDateTime.now();
-						for(User user : userList) {
-							user.bw.write("게임이 종료되었습니다.");
-							user.bw.newLine();
-							user.bw.flush();
+						for(Client client : clientList) {
+							client.bw.write("게임이 종료되었습니다.");
+							onOff = 1;
+							gameCount = 0;
+							client.bw.newLine();
+							client.bw.flush();
 						}
 						break;
 						//일단 게임은 끝나는 걸로 해놓음. 
@@ -230,15 +246,15 @@ public class MultiChatServer {
 					  
 				}
 			}catch(Exception e) {
-				userList.remove(this);
+				clientList.remove(this);
 				try {
-					userCount--;
+					connCount--;
 					//접속 종료하면 유저 수 감소함. 
 					
-					for(User user : userList) {
-						user.bw.write(thisUserNickName + "님이 방을 나갔습니다.");
-						user.bw.newLine();
-						user.bw.flush();
+					for(Client client : clientList) {
+						client.bw.write(user.getUser_nickName() + "님이 방을 나갔습니다.");
+						client.bw.newLine();
+						client.bw.flush();
 					}
 				}catch(IOException e1) {
 					e1.printStackTrace();
