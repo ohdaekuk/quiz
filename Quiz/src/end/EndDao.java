@@ -17,4 +17,10 @@ public interface EndDao {
 	// DB에 user_num으로 삭제하는 메소드
 	public int delete() throws ClassNotFoundException, SQLException; 
 	
+	// EndAll
+	public End start()  throws ClassNotFoundException, SQLException;
+	
+	// auto_increment 초기화
+	public End auto() throws ClassNotFoundException, SQLException;
+	
 }
