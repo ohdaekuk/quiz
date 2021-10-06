@@ -15,7 +15,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import end.End;
+import end.EndImp;
 import quizio.QuizUtil;
+import ranking.Ranking;
+import score.Score;
+import score.ScoreImp;
+import start.Start;
+import start.StartImp;
 import user.User;
 import user.UserImp;
 
@@ -65,8 +72,10 @@ public class MultiChatServer {
 		private String clientPassword;
 		private String clientId;
 		private int clientScore;
-		int ready=0;
 		//준비 된 상태 1, 준비 안된 상태 0
+		int ready=0;
+		//ready를 바꿀 수 있는 상태 1, 바꿀 수 없는 상태 0
+		int changeableReady = 1;
 		
 		public Client(Socket socket) throws IOException{
 			this.socket = socket;
@@ -162,21 +171,10 @@ public class MultiChatServer {
 				String msg = null;
 				
 				//조건 문이 실행 가능 상태일때는 1 아니면 0. 
-				int onOff = 1;
+				int startOnOff = 1;
+				int endOnOff = 1;
 				
 				while(true) {
-					
-					boolean readyAll = ServerMethodImpliment.getInstance().checkReady(clientList);
-					//레디 상태 받기. 
-					
-					if(connCount == 3 && onOff == 1 && readyAll) {
-						for(Client client : clientList) {
-							LocalDateTime startTime = LocalDateTime.now();
-							client.bw.write("[게임을 시작하겠습니다.]");
-							client.bw.write(question);
-							onOff = 0;
-							}
-					}
 					
 					msg = br.readLine();
 					//사용자가 보낸 메세지 읽고 
@@ -189,11 +187,33 @@ public class MultiChatServer {
 							client.bw.flush();
 						}
 					}
-					//모든 사람에게 메세지 보내기.
-
-					
 					if(msg == null) {
 						throw new Exception();
+					}
+					
+					//모든 사람에게 메세지 보내기.
+					
+					
+					boolean checkReady = ServerMethodImpliment.getInstance().checkReady(clientList);
+					//레디 상태 받기. 
+					
+					//사용자에게 콘솔 입력 받아서 레디 상태 확인.
+					if(msg.equals("/ready") && changeableReady == 1) {
+						ready = 1;
+					}
+					
+					if(connCount == 3 && startOnOff == 1 && checkReady) {
+						for(Client client : clientList) {
+							LocalDateTime startTime = LocalDateTime.now();
+							client.bw.write("[게임을 시작하겠습니다.]");
+							client.bw.write(question);
+							//if문 다시 시작하지 않기 위해서 0으로 값바꿈.
+							startOnOff = 0;
+							//시작한 후에는 레디상태 변경 불가.
+							changeableReady = 0;
+							//게임을 시작 했으므로 게임끝낼수 있도록 설정. 
+							endOnOff = 1;
+							}
 					}
 					
 					
@@ -217,27 +237,45 @@ public class MultiChatServer {
 							client.bw.write("다음문제는.. ");
 							client.bw.flush();
 							client.bw.write(question);
-							
+							client.bw.flush();
 						}
 					}
 					
 										
 					
 					//게임 종료 시점
-					if(gameCount == 4 || connCount<3) {
+					
+					if(gameCount == 4 && endOnOff == 1) {
 						//게임 종료시 게임 시작 시간 기록하기 위해 변수 선언.
 						LocalDateTime endTime = LocalDateTime.now();
+						//게임이 종료 되었으므로 다시 게임이 시작 될 수 있음.
+						startOnOff = 1;
+						//게임 수는 0으로 초기화
+						gameCount = 0;
+						//게임이 끝났으므로 다시 레디를 받기 위해 
+						changeableReady = 1;
+						//게임을 끝날 수 없는 상태로 들음. 
+						endOnOff = 0;
+						//ready 상태도 초기화.
+						ready = 0;
+						
 						for(Client client : clientList) {
 							client.bw.write("게임이 종료되었습니다.");
-							onOff = 1;
-							gameCount = 0;
+							client.bw.newLine();
+							client.bw.write("게임을 다시 시작하시려면 /ready입력해주세요.");
 							client.bw.newLine();
 							client.bw.flush();
 						}
-						break;
-						//일단 게임은 끝나는 걸로 해놓음. 
+						
+						Start dbStart = new Start(user.getUser_num(), startTime, user.getUser_nickName());
+						StartImp.getInstance().startInsert(dbStart);
+						End dbEnd = new End(user.getUser_num(), endTime, user.getUser_nickName());
+						EndImp.getInstance().endInsert(dbEnd);
+						Score dbScore = new Score(user.getUser_num(), user.getUser_nickName(), clientScore);
+						ScoreImp.getInstance().insert(dbScore);
+						Ranking dbRaking = new Ranking(user.getUser_num(), user.getUser_nickName(), 3);
+						
 						//종료 되었으므로 게임 진행하며 저장된 사항 모두 저장
-						//게임은 계속 진행하도록 할 것인지 아니면 찬반 투표를 할 것인지? 
 					}
 					
 					
@@ -252,7 +290,7 @@ public class MultiChatServer {
 					//접속 종료하면 유저 수 감소함. 
 					
 					for(Client client : clientList) {
-						client.bw.write(user.getUser_nickName() + "님이 방을 나갔습니다.");
+						client.bw.write(user.getUser_nickName() + "님이 방을 나갔습니다."); 
 						client.bw.newLine();
 						client.bw.flush();
 					}
