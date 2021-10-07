@@ -93,7 +93,7 @@ public class QuizChatServer {
 		//문제를 불러오는 메서드 
 		//로그를 텍스트에 쓰는 메서드 
 		@Override
-		public void run() {
+		public void run() { 
 			User user = new User();
 			int clientScore = 0;
 			//User의 필드 [num, id, pass, age, gender, nickname], score는 스코어 필드에.
