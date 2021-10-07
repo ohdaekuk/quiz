@@ -11,6 +11,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -35,12 +36,20 @@ public class QuizChatServer {
 	private ServerSocket serverSocket;
 	private List<User> userList;
 	//DB에 저장된 유저.
+	private Map<String, Integer> scoreMap;
 	
 	//QuizUtill: 퀴즈 관련 입출력 있는 메서드 모음 클래스.
 	private QuizUtil util = QuizUtil.getUtil();
 	private Map<String, String> quizList = util.quizToServer();
-	int gameCount = 0;
+	int  gameCount = 0;
 	int connCount = 0;
+	//User의 필드 [num, id, pass, age, gender, nickname], score는 스코어 필드에.
+	Iterator<String> keys = quizList.keySet().iterator();
+	//넥스트 한번 돌때마다 게임 카운트 숫자 올라감.
+	String question = keys.next();
+	//키 값으로 문제 정답 받기.
+	String answer = quizList.get(question);
+	List<String> rankOrder = new ArrayList<String>();  
 	
 	
 	
@@ -48,7 +57,7 @@ public class QuizChatServer {
 		serverSocket = new ServerSocket(port);
 		clientList = new ArrayList<QuizChatServer.Client>();
 		userList = new ArrayList<User>();
-		
+		scoreMap = new HashMap<String, Integer>();
 		
 	}
 	
@@ -72,7 +81,6 @@ public class QuizChatServer {
 		private BufferedWriter bw;
 		private String clientPassword;
 		private String clientId;
-		private int clientScore;
 		//준비 된 상태 1, 준비 안된 상태 0
 		int ready=0;
 		//ready를 바꿀 수 있는 상태 1, 바꿀 수 없는 상태 0
@@ -81,7 +89,6 @@ public class QuizChatServer {
 		public Client(Socket socket) throws IOException{
 			this.socket = socket;
 			bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-			connCount++;
 		}
 		
 
@@ -96,15 +103,10 @@ public class QuizChatServer {
 		//로그를 텍스트에 쓰는 메서드 
 		@Override
 		public void run() { 
+			
 			User user = new User();
-			int clientScore = 0;
-			//User의 필드 [num, id, pass, age, gender, nickname], score는 스코어 필드에.
-			Iterator<String> keys = quizList.keySet().iterator();
-			//넥스트 한번 돌때마다 게임 카운트 숫자 올라감.
-			String question = keys.next();
-			gameCount++;
-			//키 값으로 문제 정답 받기.
-			String answer = quizList.get(question);
+			
+
 			
 			
 			BufferedReader br = null;
@@ -144,6 +146,7 @@ public class QuizChatServer {
 							//아이디와 비밀번호에 해당되는 user의 정보가 위에서 선언한 User의 객체에 저장됨.
 							user = u;
 							userList.add(user);
+							scoreMap.put(user.getUser_nickName(), 0);
 							break;
 						}
 					}
@@ -205,7 +208,7 @@ public class QuizChatServer {
 						ready = 1;
 					}
 					
-					if(connCount == 3 && startOnOff == 1 && checkReady) {
+					if(startOnOff == 1 && checkReady) {
 						for(Client client : clientList) {
 							startTime = LocalDateTime.now();
 							client.bw.write("[게임을 시작하겠습니다.]");
@@ -233,7 +236,10 @@ public class QuizChatServer {
 						//맵에서 퀴즈 문제 받아서 다음 정답 세팅.
 						answer = quizList.get(question);
 						//맞춘 사람 점수 올리기.
-						clientScore += 10;
+						int score= scoreMap.get(user.getUser_nickName())+10;
+						scoreMap.replace(user.getUser_nickName(),score);
+						
+						System.out.println("241번째 줄 : " + scoreMap.get(user.getUser_nickName()));
 						//게임 숫자 카운트.
 						gameCount++;
 						System.out.println(gameCount);
@@ -254,17 +260,16 @@ public class QuizChatServer {
 						}
 					}
 					
-										
-					
 					//게임 종료 시점
 					
-					if(gameCount == 4 && endOnOff == 1) {
+
+					if(gameCount > 4 && endOnOff == 1) {
 						//게임 종료시 게임 시작 시간 기록하기 위해 변수 선언.
 						LocalDateTime endTime = LocalDateTime.now();
 						//게임이 종료 되었으므로 다시 게임이 시작 될 수 있음.
 						startOnOff = 1;
 						//게임 수는 0으로 초기화
-						gameCount = 0;
+						
 						//게임이 끝났으므로 다시 레디를 받기 위해 
 						changeableReady = 1;
 						//게임을 끝날 수 없는 상태로 들음. 
@@ -286,44 +291,57 @@ public class QuizChatServer {
 							client.bw.flush();
 						}
 						
-						Start dbStart = new Start(user.getUser_num(), startTime, user.getUser_nickName());
-						StartImp.getInstance().startInsert(dbStart);
-						End dbEnd = new End(user.getUser_num(), endTime, user.getUser_nickName());
-						EndImp.getInstance().endInsert(dbEnd);
-						Score dbScore = new Score(user.getUser_num(), user.getUser_nickName(), clientScore);
-						ScoreImp.getInstance().insert(dbScore);
 						
-						//랭킹 매기는 로직 만들기.
-						for(int j = 0; j< clientList.size()-1; j++) {
+						for(User u : userList) {
+							System.out.println("318번째 라인 user: " + u);
+							Start dbStart = new Start(0 , startTime, u.getUser_nickName());
+							StartImp.getInstance().startInsert(dbStart);
+							End dbEnd = new End(0 , endTime, u.getUser_nickName());
+							EndImp.getInstance().endInsert(dbEnd);
+							Score dbScore = new Score(0, u.getUser_nickName(), scoreMap.get(u.getUser_nickName()));
+							ScoreImp.getInstance().insert(dbScore);
+							
+							
+							System.out.println("dbStart: " + dbStart);
+							System.out.println("dbEnd: "+ dbEnd);
+							System.out.println("dbScore: "+ dbScore);
+							
+							System.out.println("실행되었는 지 확인하기.");
+
+						}
+						
+						//여기에 랭킹 매기는 로직 만들기.
+
+						
+						for(int j = 0; j< userList.size()-1; j++) {
 							for(int i = j+1; i < clientList.size(); i++) {
-								Client tempClient = null;
-								if(clientList.get(j).clientScore < clientList.get(i).clientScore) {
-									tempClient = clientList.get(i);
-									clientList.remove(i);
-									clientList.add(i, clientList.get(j));
-									clientList.remove(j);
-									clientList.add(j, tempClient);
+								User tempClient = null;
+								if(scoreMap.get(userList.get(j).getUser_nickName()) < scoreMap.get(userList.get(i).getUser_nickName())) {
+									tempClient = userList.get(i);
+									userList.remove(i);
+									userList.add(i, userList.get(j));
+									userList.remove(j);
+									userList.add(j, tempClient);
 								}
 							}
 						}
-						//랭킹을 담을 변수.
-						int rank = 0;
 						
-						for(int i = 0; i < clientList.size(); i ++) {
-							if(user.getUser_Id().equals(clientList.get(i).clientId)){
-								rank = i+1;
-							}
+						for(User u : userList) {
+							rankOrder.add(u.getUser_nickName());
 						}
 						
-						Ranking dbRaking = new Ranking(user.getUser_num(), user.getUser_nickName(), rank);
-						RankingImp.getInstance().insert(dbRaking);
+						for(User u : userList) {
+							int rank = rankOrder.indexOf(u.getUser_nickName())+1;
+							Ranking dbRaking = new Ranking(0, u.getUser_nickName(), rank);
+							RankingImp.getInstance().insert(dbRaking);
+						}
 						
-						//종료 되었으므로 게임 진행하며 저장된 사항 모두 저장
+
+						
+						
+						System.out.println("342번째 줄 "+ userList);
+						gameCount = 0;
 					}
-					
-					
-					
-					
 					  
 				}
 			}catch(Exception e) {

@@ -16,7 +16,6 @@ public class ClientSender extends Thread {
 	public void run() {
 		try(BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()))){
 			Scanner scan = new Scanner(System.in);
-			System.out.println("보낼 메세지를 입력하세요.");
 			while(true) {
 				String msg = scan.nextLine();
 				if(msg.equals("quit")) {
