@@ -34,12 +34,13 @@ public class Manager {
 					while(true) {
 						
 					System.out.println("어떤 정보를 조회하시겠습니까?");
-					System.out.println("1. 회원정보 2. 시작시간 3. 종료시간 3. 점수 4. 랭킹");
+					System.out.println("1. 회원정보 2. 시작시간 3. 종료시간 4. 점수 5. 랭킹");
 					select = scan.nextLine();
 					
 					if(select.equals("1")) {
 						System.out.println("1. user_num으로 조회하기 2. id로 조회하기 3. 나이로 조회하기 4. 성별로 조회하기 5. 닉네임으로 조회하기 6. 전체 조회하기");
 						select = scan.nextLine();
+						while (true) {
 						if(select.equals("1")) {
 							
 							// user_num으로 조회하기
@@ -52,6 +53,8 @@ public class Manager {
 							
 							select = scan.nextLine();
 							
+							break;
+							
 						} if(select.equals("2")) {
 							
 							// id로 조회하기
@@ -62,6 +65,8 @@ public class Manager {
 							System.out.println("조회를 완료하셨으면 엔터를 눌러주세요.");
 							
 							select = scan.nextLine();
+							
+							break;
 							
 						} if(select.equals("3")) {
 							
@@ -74,6 +79,8 @@ public class Manager {
 							
 							select = scan.nextLine();
 							
+							break;
+							
 						} if(select.equals("4")) {
 							
 							// 성별로 조회하기
@@ -84,6 +91,8 @@ public class Manager {
 							System.out.println("조회를 완료하셨으면 엔터를 눌러주세요.");
 							
 							select = scan.nextLine();
+							
+							break;
 							
 						} if(select.equals("5")) {
 							
@@ -96,6 +105,8 @@ public class Manager {
 							
 							select = scan.nextLine();
 							
+							break;
+							
 						} if(select.equals("6")) {
 							
 							// 전체 정보 조회하기
@@ -107,10 +118,12 @@ public class Manager {
 							
 							select = scan.nextLine();
 							
+							break;
+							
+							}
 						}
-					}
-					
-					
+						
+					}				
 					if(select.equals("2")) {
 						System.out.println("시작시간 조회하기");
 						
@@ -129,6 +142,8 @@ public class Manager {
 								
 								select = scan.nextLine();
 								
+								break;
+								
 							} if(select.equals("2")) {
 								
 								// 전체 시간 조회하기
@@ -139,6 +154,8 @@ public class Manager {
 								System.out.println("조회를 완료하셨으면 엔터를 눌러주세요.");
 								
 								select = scan.nextLine();
+								
+								break;
 								
 							}
 						}
@@ -162,6 +179,8 @@ public class Manager {
 								
 								select = scan.nextLine();
 								
+								break;
+								
 							} if(select.equals("2")) {
 								
 								// 전체 시간 조회하기
@@ -172,6 +191,8 @@ public class Manager {
 								System.out.println("조회를 완료하셨으면 엔터를 눌러주세요.");
 								
 								select = scan.nextLine();
+								
+								break;
 								
 							}
 						}
@@ -195,6 +216,8 @@ public class Manager {
 								
 								select = scan.nextLine();
 								
+								break;
+								
 							} if(select.equals("2")) {
 								
 								// user_nickName으로 조회하기
@@ -205,6 +228,8 @@ public class Manager {
 								System.out.println("조회를 완료하셨으면 엔터를 눌러주세요.");
 								
 								select = scan.nextLine();
+								
+								break;
 								
 							} if(select.equals("3")) {
 								
@@ -217,6 +242,8 @@ public class Manager {
 								
 								select = scan.nextLine();
 								
+								break;
+								
 							} if(select.equals("4")) {
 								
 								// 전체 시간 조회하기
@@ -228,7 +255,9 @@ public class Manager {
 								
 								select = scan.nextLine();
 								
-							}
+								break;
+								
+							}break;
 						}
 						
 					}
@@ -249,6 +278,8 @@ public class Manager {
 								System.out.println("조회를 완료하셨으면 엔터를 눌러주세요.");
 								
 								select = scan.nextLine();
+								
+								break;
 								
 							} if(select.equals("2")) {
 								
@@ -272,6 +303,8 @@ public class Manager {
 								
 								select = scan.nextLine();
 								
+								break;
+								
 							} if(select.equals("4")) {
 								
 								// 전체 랭크 조회하기
@@ -282,6 +315,8 @@ public class Manager {
 								System.out.println("조회를 완료하셨으면 엔터를 눌러주세요.");
 								
 								select = scan.nextLine();
+								
+								break;
 								
 							}
 							
