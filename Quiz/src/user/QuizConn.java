@@ -11,7 +11,7 @@ public class QuizConn {
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		
 		String id = "root";
-		String password = "mysql";
+		String password = "13579246!a";
 		String url =  "jdbc:mysql://localhost:3306/quiz?"
 				+ "characterEncoding=utf-8&serverTimezone=Asia/Seoul";
 		

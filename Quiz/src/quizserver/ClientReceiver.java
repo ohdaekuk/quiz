@@ -15,10 +15,10 @@ public class ClientReceiver extends Thread{
 	public void run() {
 		try(BufferedReader br = new BufferedReader(new java.io.InputStreamReader(socket.getInputStream()))){
 			
-			String msg = br.readLine(); 
+			
 			
 			while(true) {
-				System.out.println(msg);
+				System.out.println(br.readLine());
 			}
 		} catch (IOException e) {
 			System.out.println("서버와의 연결을 종료합니다.");

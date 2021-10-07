@@ -188,7 +188,6 @@ public class QuizChatServer {
 					}
 					
 					util.saveLog("["+user.getUser_nickName()+"] : " + msg);
-					//!!!!!!!!!!!!!!!!여기에서 오류 생김.//
 					
 					if(msg == null) {
 						throw new Exception();
