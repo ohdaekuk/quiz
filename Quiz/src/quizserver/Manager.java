@@ -298,6 +298,10 @@ public class Manager {
 					if(select.equals("1")) {
 						System.out.println("회원정보 삭제하기");
 						
+						List<User> userList = UserImp.getInstance().userFindAll();
+						
+						System.out.println(userList);
+						
 						while(true) {
 							
 							int delete = UserImp.getInstance().delete();
@@ -312,6 +316,10 @@ public class Manager {
 					}
 					if(select.equals("2")) {
 						System.out.println("시작시간 삭제하기");
+						
+						List<Start> startList = StartImp.getInstance().startFindAll();
+						
+						System.out.println(startList);
 						
 						while(true) {
 							
@@ -328,6 +336,10 @@ public class Manager {
 					if(select.equals("3")) {
 						System.out.println("종료시간 삭제하기");
 						
+						List<End> endList = EndImp.getInstance().endFindAll();
+						
+						System.out.println(endList);
+						
 						while(true) {
 							
 							int delete = EndImp.getInstance().delete();
@@ -343,6 +355,10 @@ public class Manager {
 					if(select.equals("4")) {
 						System.out.println("점수 삭제하기");
 						
+						List<Score> scoreList = ScoreImp.getInstance().scoreFindAll();
+						
+						System.out.println(scoreList);
+						
 						while(true) {
 							
 							int delete = ScoreImp.getInstance().delete();
@@ -357,6 +373,10 @@ public class Manager {
 					}
 					if(select.equals("5")) {
 						System.out.println("랭킹 삭제하기");
+						
+						List<Ranking> rankingList = RankingImp.getInstance().rankingFindAll();
+						
+						System.out.println(rankingList);
 						
 						while(true) {
 							
@@ -384,6 +404,10 @@ public class Manager {
 								
 								System.out.println("수정되었습니다.");
 								
+								List<User> userList = UserImp.getInstance().userFindAll();
+								
+								System.out.println(userList);
+								
 								break;
 						}
 						
@@ -397,6 +421,10 @@ public class Manager {
 							
 							System.out.println("수정되었습니다.");
 							
+							List<Score> scoreList = ScoreImp.getInstance().scoreFindAll();
+							
+							System.out.println(scoreList);
+							
 							break;
 						}
 						
@@ -409,6 +437,10 @@ public class Manager {
 							RankingImp.getInstance().update();
 							
 							System.out.println("수정되었습니다.");
+							
+							List<Ranking> rankingList = RankingImp.getInstance().rankingFindAll();
+							
+							System.out.println(rankingList);
 							
 							break;
 						}
