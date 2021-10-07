@@ -127,8 +127,6 @@ public class QuizChatServer {
 					
 					List<User> dbUserList = UserImp.getInstance().userFindAll();
 					//여기 나중에 한 폴더로 옮겨서 보기.
-					System.out.println("여기서 부터 안되는데, db랑 연결 안되나봄. ");
-					
 
 					
 					for(User u : dbUserList) {
@@ -139,6 +137,7 @@ public class QuizChatServer {
 						
 						if(user.getUser_Id().equals(clientId)&&user.getUser_Password().equals(clientPassword)) {
 							bw.write("로그인되었습니다.");
+							bw.newLine();
 							bw.flush();
 							//아이디와 비밀번호에 해당되는 user의 정보가 위에서 선언한 User의 객체에 저장됨.
 							user = u;
@@ -185,12 +184,12 @@ public class QuizChatServer {
 				//조건 문이 실행 가능 상태일때는 1 아니면 0. 
 				int startOnOff = 1;
 				int endOnOff = 1;
-				LocalDateTime startTime = null;
+				LocalDateTime startTime = LocalDateTime.now();
 				while(true) {
-					
+
 					msg = br.readLine();
 					//사용자가 보낸 메세지 읽고 
-					util.saveLog("["+user.getUser_nickName()+"] : " + msg);
+					
 					//바로 저장한다.
 					for(Client client :clientList) {
 						if(this != clientList) {
@@ -199,18 +198,22 @@ public class QuizChatServer {
 							client.bw.flush();
 						}
 					}
+					
+					util.saveLog("["+user.getUser_nickName()+"] : " + msg);
+					//!!!!!!!!!!!!!!!!여기에서 오류 생김.//
+					
 					if(msg == null) {
 						throw new Exception();
 					}
-					
 					//모든 사람에게 메세지 보내기.
 					
 					
 					boolean checkReady = ServerMethodImpliment.getInstance().checkReady(clientList);
 					//레디 상태 받기. 
+					//ready
 					
 					//사용자에게 콘솔 입력 받아서 레디 상태 확인.
-					if(msg.equals("/ready") && changeableReady == 1) {
+					if(msg.equals("ready") && changeableReady == 1) {
 						ready = 1;
 					}
 					
@@ -218,12 +221,17 @@ public class QuizChatServer {
 						for(Client client : clientList) {
 							startTime = LocalDateTime.now();
 							client.bw.write("[게임을 시작하겠습니다.]");
+							client.bw.newLine();
+							client.bw.flush();
 							client.bw.write(question);
+							client.bw.newLine();
+							client.bw.flush();
 							//if문 다시 시작하지 않기 위해서 0으로 값바꿈.
 							startOnOff = 0;
 							//시작한 후에는 레디상태 변경 불가.
 							changeableReady = 0;
 							//게임을 시작 했으므로 게임끝낼수 있도록 설정. 
+							//
 							endOnOff = 1;
 							}
 					}

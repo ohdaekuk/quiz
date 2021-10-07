@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import user.QuizConn;
+
 public class StartImp implements StartDao{
 	
 	private static StartImp instance = new StartImp();

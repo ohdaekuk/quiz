@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import user.QuizConn;
+
 public class EndImp implements EndDao{
 	
 	private static EndImp instance = new EndImp();
