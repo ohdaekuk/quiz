@@ -236,6 +236,7 @@ public class QuizChatServer {
 						clientScore += 10;
 						//게임 숫자 카운트.
 						gameCount++;
+						System.out.println(gameCount);
 						//문제 모두에게 보내기.
 						for(Client client : clientList) {
 							client.bw.write("["+user.getUser_nickName()+"] : " + "이 정답을 맞추었습니다.");
