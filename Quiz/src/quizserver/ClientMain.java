@@ -7,7 +7,9 @@ import java.net.UnknownHostException;
 public class ClientMain {
 	public static void main(String[] args) {
 		try {
-			Socket socket = new Socket("121.131.36.216", 7777);
+			//Socket socket = new Socket("121.131.36.216", 7777);
+			Socket socket = new Socket("172.30.1.35", 7777);
+			
 			System.out.println("[퀴즈 프로그램에 접속하였습니다.]");
 			ClientReceiver clientReceiver = new ClientReceiver(socket);
 			ClientSender clientSender = new ClientSender(socket);

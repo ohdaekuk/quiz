@@ -112,21 +112,21 @@ public class QuizChatServer {
 				br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				
 				
-				
 				//로그인 로직 시작.
 				while(true) {
-					
 					bw.write("아이디를 입력하세요");
+					bw.newLine();
 					bw.flush();
 					this.clientId = br.readLine();
 					
 					bw.write("비밀번호를 입력하세요");
+					bw.newLine();
 					bw.flush();
 					this.clientPassword = br.readLine();
 					
 					List<User> dbUserList = UserImp.getInstance().userFindAll();
 					//여기 나중에 한 폴더로 옮겨서 보기.
-					
+					System.out.println("확인");
 					
 
 					
