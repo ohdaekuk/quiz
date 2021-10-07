@@ -113,7 +113,7 @@ public class QuizUtil implements InputQuiz, OutputQuiz{
 	//	채팅을 입력 받으면, 시간까지 더해서 저장하는 로그.
 	public void saveLog(String chat) throws IOException {
 		File file = new File("ChatLog.txt");
-		try(BufferedWriter br = new BufferedWriter(new FileWriter(file))){
+		try(BufferedWriter br = new BufferedWriter(new FileWriter(file, true))){
 			String time = LocalDateTime.now().toString();
 			br.write(time+"]" +chat+"\n");
 		}
