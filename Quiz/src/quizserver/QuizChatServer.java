@@ -123,10 +123,11 @@ public class QuizChatServer {
 					bw.newLine();
 					bw.flush();
 					this.clientPassword = br.readLine();
+					//여기 까지는 됨. 
 					
 					List<User> dbUserList = UserImp.getInstance().userFindAll();
 					//여기 나중에 한 폴더로 옮겨서 보기.
-					System.out.println("확인");
+					System.out.println("여기서 부터 안되는데, db랑 연결 안되나봄. ");
 					
 
 					
