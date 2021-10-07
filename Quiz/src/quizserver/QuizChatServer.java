@@ -19,6 +19,7 @@ import end.End;
 import end.EndImp;
 import quizio.QuizUtil;
 import ranking.Ranking;
+import ranking.RankingImp;
 import score.Score;
 import score.ScoreImp;
 import start.Start;
@@ -309,6 +310,7 @@ public class QuizChatServer {
 						}
 						
 						Ranking dbRaking = new Ranking(user.getUser_num(), user.getUser_nickName(), rank);
+						RankingImp.getInstance().insert(dbRaking);
 						
 						//종료 되었으므로 게임 진행하며 저장된 사항 모두 저장
 					}
