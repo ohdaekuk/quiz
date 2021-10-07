@@ -43,6 +43,7 @@ public class QuizChatServer {
 	int connCount = 0;
 	
 	
+	
 	public QuizChatServer(int port) throws IOException{
 		serverSocket = new ServerSocket(port);
 		clientList = new ArrayList<QuizChatServer.Client>();
@@ -166,19 +167,6 @@ public class QuizChatServer {
 						client.bw.flush();
 				}
 				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
 				String msg = null;
 				
 				//조건 문이 실행 가능 상태일때는 1 아니면 0. 
@@ -208,10 +196,10 @@ public class QuizChatServer {
 					//모든 사람에게 메세지 보내기.
 					
 					
-					boolean checkReady = ServerMethodImpliment.getInstance().checkReady(clientList);
+					
 					//레디 상태 받기. 
 					//ready
-					
+					boolean checkReady = ServerMethodImpliment.getInstance().checkReady(clientList);
 					//사용자에게 콘솔 입력 받아서 레디 상태 확인.
 					if(msg.equals("ready") && changeableReady == 1) {
 						ready = 1;
@@ -223,6 +211,7 @@ public class QuizChatServer {
 							client.bw.write("[게임을 시작하겠습니다.]");
 							client.bw.newLine();
 							client.bw.flush();
+							
 							client.bw.write(question);
 							client.bw.newLine();
 							client.bw.flush();
@@ -238,11 +227,11 @@ public class QuizChatServer {
 					
 					
 					//정답을 맞출때 로직 
-					if(msg.equals(quizList.get(msg))) {
+					if(msg.equals(answer)) {
 						//이터레이터로 키의 다음 값 문제 받기 
 						question = keys.next();
 						//맵에서 퀴즈 문제 받아서 다음 정답 세팅.
-						quizList.get(question);
+						answer = quizList.get(question);
 						//맞춘 사람 점수 올리기.
 						clientScore += 10;
 						//게임 숫자 카운트.
@@ -255,8 +244,11 @@ public class QuizChatServer {
 							
 							
 							client.bw.write("다음문제는.. ");
+							client.bw.newLine();
 							client.bw.flush();
+							
 							client.bw.write(question);
+							client.bw.newLine();
 							client.bw.flush();
 						}
 					}
@@ -282,8 +274,12 @@ public class QuizChatServer {
 						for(Client client : clientList) {
 							client.bw.write("게임이 종료되었습니다.");
 							client.bw.newLine();
+							client.bw.flush();
+							
 							client.bw.write("게임을 다시 시작하시려면 /ready입력해주세요.");
 							client.bw.newLine();
+							client.bw.flush();
+							
 							client.bw.write("모두가 준비하면 게임이 시작됩니다.");
 							client.bw.newLine();
 							client.bw.flush();
