@@ -2,7 +2,7 @@ package quizserver;
 
 import java.util.List;
 
-import quizserver.MultiChatServer.Client;
+import quizserver.QuizChatServer.Client;
 import user.UserImp;
 
 public class ServerMethodImpliment implements ServerMethodInterface {
@@ -16,7 +16,7 @@ public class ServerMethodImpliment implements ServerMethodInterface {
 	}
 	
 	@Override
-	public boolean checkReady(List<MultiChatServer.Client> clientList) {
+	public boolean checkReady(List<QuizChatServer.Client> clientList) {
 		int readyAll = 1;
 		
 		for(Client c : clientList) {

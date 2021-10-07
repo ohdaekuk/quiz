@@ -27,8 +27,9 @@ import user.User;
 import user.UserImp;
 
 
-public class MultiChatServer {
-	private List<MultiChatServer.Client> clientList;
+public class QuizChatServer {
+	
+	private List<QuizChatServer.Client> clientList;
 	//접속자
 	private ServerSocket serverSocket;
 	private List<User> userList;
@@ -39,13 +40,11 @@ public class MultiChatServer {
 	private Map<String, String> quizList = util.quizToServer();
 	int gameCount = 0;
 	int connCount = 0;
-	private LocalDateTime startTime;
-	private LocalDateTime finishTime;
 	
 	
-	public MultiChatServer(int port) throws IOException{
+	public QuizChatServer(int port) throws IOException{
 		serverSocket = new ServerSocket(port);
-		clientList = new ArrayList<MultiChatServer.Client>();
+		clientList = new ArrayList<QuizChatServer.Client>();
 		userList = new ArrayList<User>();
 		
 		
@@ -184,7 +183,7 @@ public class MultiChatServer {
 				//조건 문이 실행 가능 상태일때는 1 아니면 0. 
 				int startOnOff = 1;
 				int endOnOff = 1;
-				
+				LocalDateTime startTime = null;
 				while(true) {
 					
 					msg = br.readLine();
@@ -215,7 +214,7 @@ public class MultiChatServer {
 					
 					if(connCount == 3 && startOnOff == 1 && checkReady) {
 						for(Client client : clientList) {
-							LocalDateTime startTime = LocalDateTime.now();
+							startTime = LocalDateTime.now();
 							client.bw.write("[게임을 시작하겠습니다.]");
 							client.bw.write(question);
 							//if문 다시 시작하지 않기 위해서 0으로 값바꿈.
@@ -275,6 +274,8 @@ public class MultiChatServer {
 							client.bw.newLine();
 							client.bw.write("게임을 다시 시작하시려면 /ready입력해주세요.");
 							client.bw.newLine();
+							client.bw.write("모두가 준비하면 게임이 시작됩니다.");
+							client.bw.newLine();
 							client.bw.flush();
 						}
 						
@@ -285,6 +286,13 @@ public class MultiChatServer {
 						Score dbScore = new Score(user.getUser_num(), user.getUser_nickName(), clientScore);
 						ScoreImp.getInstance().insert(dbScore);
 						Ranking dbRaking = new Ranking(user.getUser_num(), user.getUser_nickName(), 3);
+						//db 랭킹 매기는 로직 만들기.
+						
+						for(int i = 0; i < clientList.size(); i++) {
+							if(clientList.get(i).clientScore < clientList.get(i+1).clientScore) {
+								
+							}
+						}
 						
 						
 						//종료 되었으므로 게임 진행하며 저장된 사항 모두 저장
