@@ -92,28 +92,20 @@ public class QuizUtil implements InputQuiz, OutputQuiz{
 		try(BufferedReader br = new BufferedReader(new FileReader("Quiz.txt"))) {
 			
 			String temp = "";
-			StringBuffer sb = new StringBuffer();
 			Map<String, String> qna = new HashMap<String, String>();
 			//문제와 정답을 넣기 위한 해쉬 맵.
 			while((temp = br.readLine()) != null) {
-				sb.append(temp);
-			}
-			char[] buff = new char[sb.length()];
-			sb.getChars(0, sb.length(), buff, 0);
-			String buffStr = new String(buff);
-			String[] stringArr = buffStr.split("\n");
-			
-			//문제들을 한 문장 별로 나눔. 
-			for(int i = 0; i < stringArr.length; i++) {
-				String [] keyValue = stringArr[i].split("%");
+				String[] keyValue = temp.split("%");
 				qna.put(keyValue[0], keyValue[1]);
 			}
+			
+			//문제들을 한 문장 별로 나눔. 
 			//해쉬맵에 문제와 정답을 문제 = key, 정답 = value 형태로 넣음.
 			
 			
 			
 			
-			return null;
+			return qna;
 		}
 	}
 
