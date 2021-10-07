@@ -79,7 +79,7 @@ public class UserImp implements UserDao{
 	}
 	
 	@Override
-		public User userFindByUser_num(int user_num) {
+		public User userFindByUser_num(int user_num) throws ClassNotFoundException, SQLException {
 		
 		String sql = "select * from user where user_num = ?";
 		
@@ -93,9 +93,10 @@ public class UserImp implements UserDao{
 				List<User> userList = new ArrayList<User>();
 				
 				if(rs.next()) {
-					return convertUser(rs);
+					
 				}
 					
+				return convertUser(rs);
 			}
 		}
 	}
