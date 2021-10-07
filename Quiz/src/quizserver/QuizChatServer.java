@@ -285,15 +285,30 @@ public class QuizChatServer {
 						EndImp.getInstance().endInsert(dbEnd);
 						Score dbScore = new Score(user.getUser_num(), user.getUser_nickName(), clientScore);
 						ScoreImp.getInstance().insert(dbScore);
-						Ranking dbRaking = new Ranking(user.getUser_num(), user.getUser_nickName(), 3);
-						//db 랭킹 매기는 로직 만들기.
 						
-						for(int i = 0; i < clientList.size(); i++) {
-							if(clientList.get(i).clientScore < clientList.get(i+1).clientScore) {
-								
+						//랭킹 매기는 로직 만들기.
+						for(int j = 0; j< clientList.size()-1; j++) {
+							for(int i = j+1; i < clientList.size(); i++) {
+								Client tempClient = null;
+								if(clientList.get(j).clientScore < clientList.get(i).clientScore) {
+									tempClient = clientList.get(i);
+									clientList.remove(i);
+									clientList.add(i, clientList.get(j));
+									clientList.remove(j);
+									clientList.add(j, tempClient);
+								}
+							}
+						}
+						//랭킹을 담을 변수.
+						int rank = 0;
+						
+						for(int i = 0; i < clientList.size(); i ++) {
+							if(user.getUser_Id().equals(clientList.get(i).clientId)){
+								rank = i+1;
 							}
 						}
 						
+						Ranking dbRaking = new Ranking(user.getUser_num(), user.getUser_nickName(), rank);
 						
 						//종료 되었으므로 게임 진행하며 저장된 사항 모두 저장
 					}
