@@ -81,6 +81,7 @@ public class QuizChatServer {
 		public Client(Socket socket) throws IOException{
 			this.socket = socket;
 			bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+			connCount++;
 		}
 		
 
@@ -154,7 +155,7 @@ public class QuizChatServer {
 						bw.flush();
 					}
 				}
-				connCount++;
+				
 				//접속 성공하면 유저 카운트 올라감.
 				
 				
