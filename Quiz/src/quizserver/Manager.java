@@ -24,10 +24,10 @@ public class Manager {
 			
 			String select = "";
 			
-			while (!select.equals("4")) {	
+			while (!select.equals("0")) {	
 				
 				System.out.println("어떤 작업을 하시겠습니까?");
-				System.out.println("1. 정보 조회하기 2. 정보 삭제하기 3. 정보 수정하기 4. 종료하기 ");
+				System.out.println("1. 정보 조회하기 2. 정보 삭제하기 3. 정보 수정하기 0. 종료하기 ");
 				select = scan.nextLine();
 				
 				if(select.equals("1")) {
@@ -326,8 +326,11 @@ public class Manager {
 					break;
 					}
 				}if(select.equals("2")) {
+					
+					while(true){
+					
 					System.out.println("어떤 정보를 삭제하시겠습니까?");
-					System.out.println("1. 회원정보 2. 시작시간 3. 종료시간 3. 점수 4. 랭킹");
+					System.out.println("1. 회원정보 2. 시작시간 3. 종료시간 4. 점수 5. 랭킹");
 					select = scan.nextLine();
 					
 					if(select.equals("1")) {
@@ -422,10 +425,12 @@ public class Manager {
 							RankingImp.getInstance().auto();
 							
 							break;
+							
 						}
-					}
+					}break;
 				}
-				if(select.equals("3")) {
+				
+				}if(select.equals("3")) {
 					System.out.println("정보 수정하기");
 					System.out.println("1. 회원정보 2. 점수 3. 랭킹");
 					select = scan.nextLine();
